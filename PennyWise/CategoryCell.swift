@@ -33,24 +33,24 @@ class CategoryCell: UICollectionViewCell {
     }
   }
   
-  override var selected:Bool {
+  override var isSelected:Bool {
     didSet {
-      if selected {
+      if isSelected {
         imageView.tintColor = appRedColor
       } else {
-        imageView.tintColor = UIColor.blackColor()
+        imageView.tintColor = UIColor.black
       }
     }
   }
   
-  private func scalePath(path:UIBezierPath, size:CGSize) {
+  fileprivate func scalePath(_ path:UIBezierPath, size:CGSize) {
     // scale path - icons should all be same height
     let scale = size.height / path.bounds.size.height * 0.5
-    path.applyTransform(CGAffineTransformMakeScale(scale, scale))
+    path.apply(CGAffineTransform(scaleX: scale, y: scale))
     
     // move path to origin
-    path.applyTransform(CGAffineTransformMakeTranslation(-path.bounds.origin.x, -path.bounds.origin.y))
+    path.apply(CGAffineTransform(translationX: -path.bounds.origin.x, y: -path.bounds.origin.y))
     // move path into center
-    path.applyTransform(CGAffineTransformMakeTranslation(size.width/2 - path.bounds.width/2, size.height/2 - path.bounds.height/2))
+    path.apply(CGAffineTransform(translationX: size.width/2 - path.bounds.width/2, y: size.height/2 - path.bounds.height/2))
   }
 }

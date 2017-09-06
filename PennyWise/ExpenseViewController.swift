@@ -23,7 +23,7 @@
 import UIKit
 
 protocol ExpenseViewControllerDelegate {
-  func expenseViewController(expenseViewController:ExpenseViewController,
+  func expenseViewController(_ expenseViewController:ExpenseViewController,
     didExpenseCategory category:Category?, amount:Float)
 }
 
@@ -35,10 +35,10 @@ class ExpenseViewController: UIViewController {
   @IBOutlet var backspaceView: NumberView!
   @IBOutlet var btnDone: UIButton!
   
-  private let cellMargin:CGFloat = 10
+  fileprivate let cellMargin:CGFloat = 10
   
-  private let backspace:Int = 99
-  private let decimalPoint = 98
+  fileprivate let backspace:Int = 99
+  fileprivate let decimalPoint = 98
 
   var delegate: ExpenseViewControllerDelegate?
   
@@ -49,7 +49,7 @@ class ExpenseViewController: UIViewController {
     super.viewDidLoad()
     
     // Set up numbers for numeric keyboard
-    for (index, numberView) in numberViews.enumerate() {
+    for (index, numberView) in numberViews.enumerated() {
       numberView.number = index
       numberView.delegate = self
     }
@@ -62,7 +62,7 @@ class ExpenseViewController: UIViewController {
     
   }
   
-  @IBAction func btnDone(sender: UIButton) {
+  @IBAction func btnDone(_ sender: UIButton) {
     var spent:Float = 0
     if let text = resultLabel.text {
       let numericText = String(text.characters.dropFirst())
@@ -72,20 +72,20 @@ class ExpenseViewController: UIViewController {
       selectedCategory, amount:spent)
   }
   
-  func setBtnDone(enabled enabled:Bool) {
-    btnDone.enabled = enabled
-    if btnDone.enabled {
+  func setBtnDone(enabled:Bool) {
+    btnDone.isEnabled = enabled
+    if btnDone.isEnabled {
       btnDone.backgroundColor = buttonEnabledColor
     }
   }
   
-  override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-    return [.Portrait, .PortraitUpsideDown]
+  override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+    return [.portrait, .portraitUpsideDown]
   }
   
-  override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "EmbedCategoryViewController" {
-      if let controller = segue.destinationViewController as? CategoryViewController {
+      if let controller = segue.destination as? CategoryViewController {
         controller.collectionView?.delegate = self
       }
     }
@@ -94,7 +94,7 @@ class ExpenseViewController: UIViewController {
 
 extension ExpenseViewController: NumberViewDelegate {
   
-  func numberTapped(number:Int) {
+  func numberTapped(_ number:Int) {
     var text = resultLabel.text ?? "$0"
     guard text.characters.count > 1 else { return }
     
@@ -132,30 +132,30 @@ extension ExpenseViewController: NumberViewDelegate {
 
 extension ExpenseViewController: UICollectionViewDelegate {
 
-  func collectionView(collectionView: UICollectionView,
-                willDisplayCell cell: UICollectionViewCell,
-                forItemAtIndexPath indexPath: NSIndexPath) {
+  func collectionView(_ collectionView: UICollectionView,
+                willDisplay cell: UICollectionViewCell,
+                forItemAt indexPath: IndexPath) {
     if let cell = cell as? CategoryCell {
       if cell.category?.name == selectedCategory?.name {
-        collectionView.selectItemAtIndexPath(indexPath, animated: true,
-          scrollPosition: .None)
-        cell.selected = true
+        collectionView.selectItem(at: indexPath, animated: true,
+          scrollPosition: UICollectionViewScrollPosition())
+        cell.isSelected = true
         cell.setNeedsDisplay()
         setBtnDone(enabled: true)
       }
     }
   }
   
-  func collectionView(collectionView: UICollectionView,
-                didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-    let cell = collectionView.cellForItemAtIndexPath(indexPath)
+  func collectionView(_ collectionView: UICollectionView,
+                didDeselectItemAt indexPath: IndexPath) {
+    let cell = collectionView.cellForItem(at: indexPath)
     cell?.setNeedsDisplay()
   }
   
-  func collectionView(collectionView: UICollectionView,
-                didSelectItemAtIndexPath indexPath: NSIndexPath) {
+  func collectionView(_ collectionView: UICollectionView,
+                didSelectItemAt indexPath: IndexPath) {
     selectedCategory = categories[indexPath.row]
-    let cell = collectionView.cellForItemAtIndexPath(indexPath)
+    let cell = collectionView.cellForItem(at: indexPath)
                   
     cell?.setNeedsDisplay()
     setBtnDone(enabled: true)
@@ -164,15 +164,15 @@ extension ExpenseViewController: UICollectionViewDelegate {
 
 extension ExpenseViewController: UICollectionViewDelegateFlowLayout {
   
-  func collectionView(collectionView: UICollectionView,
+  func collectionView(_ collectionView: UICollectionView,
           layout collectionViewLayout:UICollectionViewLayout,
-          minimumInteritemSpacingForSectionAtIndex section:Int) -> CGFloat {
+          minimumInteritemSpacingForSectionAt section:Int) -> CGFloat {
     return cellMargin
   }
   
-  func collectionView(collectionView : UICollectionView,
+  func collectionView(_ collectionView : UICollectionView,
           layout collectionViewLayout:UICollectionViewLayout,
-          sizeForItemAtIndexPath indexPath:NSIndexPath) -> CGSize
+          sizeForItemAt indexPath:IndexPath) -> CGSize
   {
     // Ensure that there are three columns no
     // matter what device

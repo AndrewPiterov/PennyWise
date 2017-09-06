@@ -34,18 +34,18 @@ class PDFViewController: UIViewController {
 
     // Load the pdf file in a UIWebView
     if let url = documentPath() {
-      webView.loadRequest(NSURLRequest(URL: url))
+      webView.loadRequest(URLRequest(url: url))
     }
   }
   
   // Document Directory URL
-  private func documentPath() -> NSURL? {
-    let fileManager = NSFileManager.defaultManager()
-    let documentsUrl = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as NSURL
-    return documentsUrl.URLByAppendingPathComponent("PennyWise.pdf")
+  fileprivate func documentPath() -> URL? {
+    let fileManager = FileManager.default
+    let documentsUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0] as URL
+    return documentsUrl.appendingPathComponent("PennyWise.pdf")
   }
   
-  private func createPDF() {
+  fileprivate func createPDF() {
     // Create PDF
     // set the default page size to 8.5 by 11 inches
     // (612 by 792 points).

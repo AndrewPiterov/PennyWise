@@ -24,7 +24,7 @@ import UIKit
 
 
 @objc protocol NumberViewDelegate {
-  func numberTapped(number:Int)
+  func numberTapped(_ number:Int)
 }
 
 class NumberView: UIView {
@@ -45,7 +45,7 @@ class NumberView: UIView {
     }
   }
   
-  @IBAction func handleTap(gesture:UITapGestureRecognizer) {
+  @IBAction func handleTap(_ gesture:UITapGestureRecognizer) {
     delegate?.numberTapped(number)
   }
   
@@ -61,20 +61,20 @@ class NumberView: UIView {
   func setup() {
     numberLabel = UILabel(frame: bounds)
     guard let numberLabel = numberLabel else { return }
-    numberLabel.textAlignment = .Center
+    numberLabel.textAlignment = .center
     numberLabel.textColor = darkTextColor
     numberLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 32)
     numberLabel.text = "0"
     addSubview(numberLabel)
 
     numberLabel.translatesAutoresizingMaskIntoConstraints  = false
-    numberLabel.topAnchor.constraintEqualToAnchor(topAnchor).active = true
-    numberLabel.heightAnchor.constraintEqualToAnchor(heightAnchor).active = true
-    numberLabel.leadingAnchor.constraintEqualToAnchor(leadingAnchor).active = true
-    numberLabel.widthAnchor.constraintEqualToAnchor(widthAnchor).active = true
+    numberLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
+    numberLabel.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+    numberLabel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+    numberLabel.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
   }
   
-  override func intrinsicContentSize() -> CGSize {
+  override var intrinsicContentSize : CGSize {
     return bounds.size
   }
   
