@@ -27,6 +27,7 @@ import UIKit
   func numberTapped(_ number:Int)
 }
 
+@IBDesignable
 class NumberView: UIView {
   
   @IBOutlet var delegate:NumberViewDelegate?
@@ -44,6 +45,23 @@ class NumberView: UIView {
       numberLabel?.text = label
     }
   }
+    
+    @IBInspectable var fillColor: UIColor = UIColor.red
+    @IBInspectable var strokeColor: UIColor = UIColor.blue
+    @IBInspectable var lineWidth: CGFloat = 2
+    
+    override func draw(_ rect: CGRect) {
+        let insetRect = rect.insetBy(dx: lineWidth/2, dy: lineWidth/2)
+        let path = UIBezierPath(ovalIn: insetRect)
+        path.lineWidth = lineWidth
+        
+        fillColor.setFill()
+        path.fill()
+        
+        strokeColor.setStroke()
+        path.stroke()
+        
+    }
   
   @IBAction func handleTap(_ gesture:UITapGestureRecognizer) {
     delegate?.numberTapped(number)
